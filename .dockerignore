@@ -1,0 +1,63 @@
+# Docker忽略文件
+
+# Git相关
+.git
+.gitignore
+*.md
+
+# Python缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+inference-server-env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 日志文件
+*.log
+logs/
+
+# 输出文件
+outputs/
+runs_infer/
+results/
+
+# 临时文件
+tmp/
+temp/
+.cache/
+
+# Docker相关
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# 测试文件（保留test_image.jpg）
+test_images/
+!test_image.jpg
+
+# 文档
+docs/
+README*.md
+
+# 脚本（排除Docker启动脚本）
+*.sh
+!docker-entrypoint*.sh
+*.ps1
+
+# 大文件（权重文件在运行时挂载）
+# weights/
+# *.ckpt
+# *.pt
+# *.pth
