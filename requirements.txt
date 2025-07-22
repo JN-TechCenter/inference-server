@@ -1,35 +1,24 @@
-# 推理服务器项目依赖包 - 通用版本
-# 同时支持CPU和GPU，运行时自动选择
+# MindSpore推理服务器依赖
+# 注意：MindSpore在Dockerfile中单独安装，使用官方whl包
 
-# 深度学习框架 - 优先GPU，CPU降级
-# 安装顺序很重要：先尝试GPU版本，失败后安装CPU版本
-mindspore-gpu>=2.5.0; sys_platform != "darwin"
-mindspore>=2.5.0
+# Web框架
+fastapi>=0.100.0
+uvicorn>=0.23.2
+python-multipart>=0.0.6
 
-# YOLO模型框架
-mindyolo>=0.5.0
+# 图像处理 - 使用headless版本减少包大小
+opencv-python-headless==4.8.0.76
+Pillow>=9.0.0
 
-# 计算机视觉和数值计算
-opencv-python>=4.8.0
-numpy>=1.21.0,<1.25.0  # 固定版本以确保兼容性
+# 数据处理
+numpy>=1.21.0
+pyyaml>=6.0.1
 
-# 配置文件处理
-PyYAML>=6.0
+# YOLO相关依赖
+mindyolo>=0.3.0
 
-# 必需依赖
-tqdm>=4.60.0
-matplotlib>=3.5.0
-Pillow>=8.0.0
+# 日志和监控
+loguru>=0.6.0
 
-# 性能优化
-psutil>=5.8.0
-
-# Web服务（可选）
-fastapi>=0.68.0
-uvicorn[standard]>=0.15.0
-
-# 开发和调试
-ipython>=7.25.0
-
-# 额外的GPU支持库（可选）
-pynvml>=11.0.0  # NVIDIA管理库
+# HTTP客户端（用于健康检查等）
+httpx>=0.24.0
