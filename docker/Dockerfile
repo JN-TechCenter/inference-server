@@ -25,28 +25,25 @@ RUN apt-get update && apt-get install -y \
 
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
 
-RUN python3 -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple/
+# 设置pip默认镜像源并升级
+ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/ \
+    PIP_TRUSTED_HOST=pypi.tuna.tsinghua.edu.cn
+
+RUN python3 -m pip install --upgrade pip
 
 WORKDIR /app
 
+# 设置应用环境变量
 ENV PYTHONUNBUFFERED=1 \
     AUTO_DEVICE_SELECTION=true \
     DEVICE_DETECTION_MODE=smart
 
-COPY docker/scripts/install_dependencies.sh .
-RUN chmod +x install_dependencies.sh && ./install_dependencies.sh
+# 安装基础Python依赖
+COPY requirements.txt .
+RUN echo "正在安装Python依赖..." && \
+    python3 -m pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# 只复制必需的应用文件
+COPY app/ ./app/
+COPY weights/ ./weights/
 
-RUN mkdir -p /app/runs_infer /app/logs /app/outputs
-
-COPY docker/scripts/docker-entrypoint-smart.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint-smart.sh
-
-EXPOSE 8000
-
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD python3 -c "import mindspore; print('OK')" || exit 1
-
-ENTRYPOINT ["docker-entrypoint-smart.sh"]
-CMD ["python3", "app/src/core/predict.py"]
